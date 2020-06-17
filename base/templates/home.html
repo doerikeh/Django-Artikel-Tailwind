@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | Freinds{% endblock title %}
+
+{% block content %}
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex -mx-6">
+        {% include "include/sidebar.html" %}
+        <div class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5">
+          <div id="content">
+              <div class="flex">
+                <div class="pt-24 pb-16 lg:pt-28 w-full">
+                  {% include "include/body.html" %}
+                </div>
+              </div>
+          </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}

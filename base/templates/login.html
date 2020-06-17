@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Artikel | Login{% endblock title %}
+
+{% block content %}
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex  -mx-6">
+        <div class="pt-24 flex justify-center items-center pb-16 lg:pt-28 w-full">
+            <div class="w-full max-w-xs">
+                <h1 class="text-3xl font-bold text-indigo-800 mb-8 mx-32">Login</h1>
+                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="POST"> {% csrf_token %}
+                            <div class="mb-4">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">{{ form.email.label_tag }}</label>
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.email.errors %}is-valid{% endif %}" id="id_email" 
+                                    name="email" placeholder="Email" value="{{ form.email.value|default:''}}" />
+                                    <div>
+                                     {% if form.email.errors %}
+                                        <span class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative '>{{ form.email.errors}}</span>
+                                      {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">{{ form.password.label_tag }}</label>
+                                    <input type="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline {% if form.password.errors %}is-valid{% endif %}" id="id_password">
+                                    
+                                    {% if form.password.errors %}
+                                        <div>
+                                            {{form.password.errors}}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                Sign In
+                            </button>
+                            <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                                Forgot Password?
+                            </a>
+                        </div>
+                    </form>
+                <p style="margin-top: 1rem;">
+                    Don't have an account? <Link to='/register'>Register</Link>
+                </p>
+                <p class="text-center text-gray-500 text-xs">
+                    &copy;2020 Acme Corp. All rights reserved.
+                </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
