@@ -1,7 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AdminUser
 
-from .models import User
+from .models import User, Tags, Artikel
+
+import datetime
+
+
+class DateYearFilter(admin.SimpleListFilter):
+    title = 'year'
+    parameter_name = "date_created"
+
+    def lookups(self, request, model_admin):
+        firstyear = Tags.objects.order_by("date_created").first().date_created.year
+        # firstyear = Tags.objects.order_by("date_created").first().date_created.year
+        currentyear = datetime.datetime.now().year
+        years = []
+        for x in range(currentyear - firstyear):
+            yearloop = firstyear+x
+            years.insert(0,(str(currentyear), str(yearloop)))
+        years.insert(0,(str(currentyear), str(currentyear)))
+        return years
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(date_created__year=self.value())
+        else:
+            return queryset
 
 @admin.register(User)
 class Users(AdminUser):
@@ -22,3 +46,20 @@ class Users(AdminUser):
     list_display = ("email","is_staff" , "last_login",)
     search_fields = ("email", "first_name", "last_name", )
     ordering = ("email",)
+
+@admin.register(Tags)
+class TagsAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug", "bio","date_created")
+    list_filter = (DateYearFilter, )
+    search_fields = ("title", "bio")
+    prepopulated_fields = {"slug":("title",)}
+    
+@admin.register(Artikel)
+class ArtikelAdmin(admin.ModelAdmin):
+    list_display = ("user", "judul", "slug", "date_created", "date_updated", "media")
+    list_filter = (DateYearFilter,)
+    autocomplete_fields = ('tags',)
+    search_fields = ("user", "judul", "date_created")
+    prepopulated_fields = {"slug":("judul",)}
+    list_max_show_all = 900
+    list_per_page = 30
