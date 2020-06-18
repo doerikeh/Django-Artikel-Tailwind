@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.db.models import Q
+from django.urls import reverse
 
 class UserQuerySet(models.QuerySet):
     def search(self, query=None):
@@ -96,3 +97,9 @@ class Artikel(models.Model):
     isi = models.TextField()
     objects = ArtikelManager()
     media = models.FileField(upload_to="File/")
+
+    def __str__(self):
+        return self.judul
+
+    def get_absolute_url(self):
+        return reverse("base:detail-artikel", kwargs={"slug": self.slug})

@@ -13,19 +13,21 @@
                    </div>
                </div>
                <div class="flex justify-center flex-grow lg:w-5/6 xl:w-11/12">   
-                   <div class="w-full lg:px-6 xl:w-3/4 xl:px-12">
-                       <div class="relative">
-                           <span class="algolia-autocomplete">
-                               <input class="transition-colors duration-100 ease-in-out focus:outline-0
-                               border border-transparent focus:bg-white focus:border-gray-400 placeholder-gray-600
-                               rounded-lg bg-gray-200 py-2 pr-4 pl-10 block appearance-none leading-normal ds-input relative" 
-                               type="text" name="search" style="width: 34rem;" placeholder="Search the docs Press to focus"/>
-                           </span>
-                           <div class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
-                               <svg class="fill-current pointer-events-none text-gray-600 w-4 h-4" id="Capa_1" height="512" viewBox="0 0 515.558 515.558" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m378.344 332.78c25.37-34.645 40.545-77.2 40.545-123.333 0-115.484-93.961-209.445-209.445-209.445s-209.444 93.961-209.444 209.445 93.961 209.445 209.445 209.445c46.133 0 88.692-15.177 123.337-40.547l137.212 137.212 45.564-45.564c0-.001-137.214-137.213-137.214-137.213zm-168.899 21.667c-79.958 0-145-65.042-145-145s65.042-145 145-145 145 65.042 145 145-65.043 145-145 145z"/></svg>
-                           </div>
-                       </div>
-                   </div>
+                <form method="GET" action="{% url 'base:search' %}">{% csrf_token %}
+                    <div class="w-full lg:px-6 xl:w-3/4 xl:px-12">
+                        <div class="relative">
+                            <span class="algolia-autocomplete">
+                                <input class="transition-colors duration-100 ease-in-out focus:outline-0
+                                border border-transparent focus:bg-white focus:border-gray-400 placeholder-gray-600
+                                rounded-lg bg-gray-200 py-2 pr-4 pl-10 block appearance-none leading-normal ds-input relative" 
+                                type="text" name="q" style="width: 34rem;" placeholder="Search the docs Press to focus"/>
+                            </span>
+                            <div class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
+                                <svg class="fill-current pointer-events-none text-gray-600 w-4 h-4" id="Capa_1" height="512" viewBox="0 0 515.558 515.558" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m378.344 332.78c25.37-34.645 40.545-77.2 40.545-123.333 0-115.484-93.961-209.445-209.445-209.445s-209.444 93.961-209.444 209.445 93.961 209.445 209.445 209.445c46.133 0 88.692-15.177 123.337-40.547l137.212 137.212 45.564-45.564c0-.001-137.214-137.213-137.214-137.213zm-168.899 21.667c-79.958 0-145-65.042-145-145s65.042-145 145-145 145 65.042 145 145-65.043 145-145 145z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                    <button type="button" class="flex px-6 items-center lg:hidden text-gray-500 focus:outline-none focus:text-gray-700">
                        <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z">
@@ -41,9 +43,11 @@
                    
                </div>
                {% if user.is_authenticated %}
-               <div class="hidden lg:flex lg:items-center lg:justify-between xl:w-1/4 px-6">
+               <div class="hidden lg:flex lg:items-center lg:justify-center xl:w-1/4 px-6">
                 <div class="relative mr-4">
-                    <h1>Hai</h1>
+                    <a href="#" class="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
+                        <img class="rounded-full h-8 w-8 object-cover" src="{{ request.user.image_profile.url }}" alt="">
+                    </a>
                 </div>
                 
                </div>

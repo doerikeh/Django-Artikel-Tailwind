@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 import logging
 from django.contrib.auth import login, authenticate
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from .forms import UserCreationForm
@@ -10,6 +10,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from itertools import chain
+from django.core.mail import send_mail
 
 
 
@@ -70,5 +71,12 @@ class SearchView(ListView):
         return Artikel.objects.none() and User.objects.none()
 
 class ArtikelView(ListView):
+    model = Artikel
     queryset = Artikel.objects.all()
+    context_object_name = "artikel_list"
     template_name = "home.html"
+
+
+class ArtikelDetail(DetailView):
+    model = Artikel
+    template_name = "include/detail_artikel.html"

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Artikel {% endblock title %}
+
+{% block content %}
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex -mx-6">
+        {% include "include/sidebar.html" %}
+          <div class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5">
+            <div id="content">
+                <div class="flex">
+                  <div class="pt-24 pb-16 lg:pt-28 w-full">
+                    <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
+                        <h1 class="flex items-center text-3xl font-bold">{{ object.judul}}</h1>
+                        <hr class="my-8 border-b-2 border-gray-200"/>
+                    </div>
+                    <div class="flex">
+                        <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+                            <img src="{{object.media.url}}" alt="">
+                            <p>asadasdsadasd</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

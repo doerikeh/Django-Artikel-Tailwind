@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 
-    <title>Document</title>
+    <title>{% block title %}{% endblock title %}</title>
 </head>
-<body>
-    
+<body class="text-gray-900 leading-normal" style="background-color: #fcfcfc;">
+    {% include "include/navbar.html" %}
+    {% block content %}
+    {% endblock content %}
 </body>
 </html>
