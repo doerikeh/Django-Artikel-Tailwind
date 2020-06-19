@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Artikel | Detail {% endblock title %}
+
+{% block content %}
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex -mx-6">
+        <div class="flex">
+          <div class="pt-24 pb-16 lg:pt-28 ml-8 w-full">
+            <main class="w-full">
+                <!-- Replace with your content -->
+                  <img src="{{object.image_sampul.url}}" class="" style="width: 100rem;" alt=""> 
+                <!-- /End replace -->
+            </main>
+          </div>
+        </div>
+        <div class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5">
+            <div id="content">
+                <div class="flex">
+                  <div class="pt-24 pb-16 lg:pt-28 w-full">
+                    <div class="flex">
+                  <div class="markdown w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+

@@ -54,7 +54,9 @@ class User(AbstractUser):
     username = None
     username_user = models.CharField(max_length=90, blank=False, null=False)
     image_profile = models.ImageField(upload_to="profile/", null=True, blank=True)
+    image_sampul = models.ImageField(upload_to="sampul/", null=True, blank=True)
     email = models.EmailField('email address', unique=True, blank=True, null=False)
+    slug = models.SlugField(blank=True, null=True)
     no_tlp = models.IntegerField(validators=[MaxValueValidator(3012)], null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     USERNAME_FIELD = 'email'
@@ -63,6 +65,9 @@ class User(AbstractUser):
     
     def __str__(self):
         return f"{self.email}"
+    
+    def get_absolute_url(self):
+        return reverse("base:user-detail", kwargs={"slug": self.slug})
 
 class Tags(models.Model):
     title = models.CharField(max_length=100)

@@ -41,6 +41,10 @@ class SingupView(FormView):
         )
         return response
 
+class UserDetail(DetailView):
+    model = User
+    template_name = "detail_user.html"
+
 class SearchView(ListView):
     template_name = "search.html"
     paginate_by = 20

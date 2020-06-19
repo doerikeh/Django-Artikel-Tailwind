@@ -53,7 +53,7 @@ class DateYearFilterArtikel(admin.SimpleListFilter):
 class Users(AdminUser):
     fieldsets = (
         (None, {"fields":("email", "password")}),
-        ("Personal info", {"fields": ("username_user","first_name", "last_name", "no_tlp", "bio", "image_profile")},),
+        ("Personal info", {"fields": ("username_user","first_name", "slug","last_name", "no_tlp", "bio", "image_profile", "image_sampul")},),
         ("Permission", {"fields":("is_active", "is_staff", "is_superuser", "groups", "user_permissions")},),
         ("Important date", {"fields": ("last_login", "date_joined")},),
     )
@@ -65,6 +65,7 @@ class Users(AdminUser):
 
     list_filter = ("is_staff", "is_superuser", "is_active")
     list_display_links = ("email",)
+    prepopulated_fields = {"slug":("username_user",)}
     list_display = ("images", "email","is_staff" , "last_login",)
     search_fields = ("email", "first_name", "last_name", )
     ordering = ("email",)
