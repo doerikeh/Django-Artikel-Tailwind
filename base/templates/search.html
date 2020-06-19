@@ -6,7 +6,7 @@
 {% block content %}
 <div>
     <div class="w-full max-w-screen-xl mx-auto px-6 ">
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-3 gap-4 my-24">
       <!-- <div class="lg:flex -mx-6">
         <div class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5">
             <div class="pt-24 pb-16 lg:pt-28 w-full"> -->
@@ -14,7 +14,7 @@
             {% with object|class_name as klass %}
         
                 {% if klass == 'Artikel' %}
-                <div class="mx-auto px-4 py-8 max-w-xl my-20">
+                <div class="mx-auto max-w-xl">
                     <div class="bg-white shadow-2xl rounded-lg mb-6 tracking-wide" >
                         <div class="md:flex-shrink-0">
                             <img src="{{object.media.url}}" alt="mountains" class="w-full h-64 rounded-lg rounded-b-none">

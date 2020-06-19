@@ -43,6 +43,7 @@ class SingupView(FormView):
 
 class UserDetail(DetailView):
     model = User
+    context_object_name = "user_detail"
     template_name = "detail_user.html"
 
 class SearchView(ListView):

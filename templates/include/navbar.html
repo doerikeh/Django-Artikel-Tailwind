@@ -1,15 +1,27 @@
 <div>
     <header id="header">
-   <div class="flex bg-white border-b border-gray-200 fixed top-0 inset-x-0 z-50 h-16 items-center">
+   <div class="flex bg-white border-b border-gray-200 fixed top-0 inset-x-0 h-16 items-center" style="z-index: 100;">
        <div class="w-full max-w-screen-xl relative mx-auto px-6">
            <div class="flex items-center -mx-6">
                <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
                    <div class="flex items-center">
-                       <a href="/" class="block lg:mr-4">
+                       <a href="/" class="block lg:mr-4 lg:ml-8">
                            <svg class="h-10 w-auto hidden md:block" height="72" viewBox="0 0 128 128" width="72" xmlns="http://www.w3.org/2000/svg"><g><g><path d="m64 78.38v28.75l-24.896 14.37-24.897-14.37v-28.75l24.897-14.38z" fill="#fd637b"/><path d="m39.1 92.75v28.75l-24.89-14.37v-28.75z" fill="#62e0da"/><path d="m64 78.38v28.75l-24.9 14.37v-28.75z" fill="#fdd82e"/></g><g><path d="m64 20.88v28.75l-24.896 14.37-24.897-14.37v-28.75l24.897-14.38z" fill="#62e0da"/><path d="m39.1 35.25v28.75l-24.89-14.37v-28.75z" fill="#fdd82e"/><path d="m64 20.88v28.75l-24.9 14.37v-28.75z" fill="#fd637b"/></g><g><path d="m113.793 49.63v28.75l-24.897 14.37-24.896-14.37v-28.75l24.896-14.38z" fill="#fdd82e"/><path d="m113.79 49.63v28.75l-24.89 14.37v-28.75z" fill="#fd637b"/><path d="m88.9 64v28.75l-24.9-14.37v-28.75z" fill="#62e0da"/></g></g></svg>
                        </a>
-                       <a href="" class="block lg:mr-4 ml-24">
-                        <svg height="43" viewBox="0 -52 512 512" width="43" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h113.292969v113.292969h-113.292969zm0 0" fill="#62e0da"/><path d="m149.296875 0h362.703125v113.292969h-362.703125zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m0 147.007812h113.292969v113.292969h-113.292969zm0 0"/><path fill="#fdd82e" d="m149.296875 147.007812h362.703125v113.292969h-362.703125zm0 0"/><path d="m0 294.011719h113.292969v113.296875h-113.292969zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m149.296875 294.011719h362.703125v113.296875h-362.703125zm0 0"/></svg>                       </a>
+                       <div>
+                           <button id="userButton" class="block lg:mr-4 ml-24">
+                                <svg height="43" viewBox="0 -52 512 512" width="43" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h113.292969v113.292969h-113.292969zm0 0" fill="#62e0da"/><path d="m149.296875 0h362.703125v113.292969h-362.703125zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m0 147.007812h113.292969v113.292969h-113.292969zm0 0"/><path fill="#fdd82e" d="m149.296875 147.007812h362.703125v113.292969h-362.703125zm0 0"/><path d="m0 294.011719h113.292969v113.296875h-113.292969zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m149.296875 294.011719h362.703125v113.296875h-362.703125zm0 0"/></svg>
+                        </button>
+                        <div id="userMenu" class="bg-white rounded shadow-md absolute mt-4 overflow-auto z-30 invisible px-4 py-4" style="width: 82%; height: 10rem;">
+                            <ul class="list-reset flex">
+                                <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">Techo</p>
+                                <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">Ekonomi</p>
+                                <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">Ekonomi</p>
+                                <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">Mountain</p>
+                                <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">Book</p>
+                            </ul>
+                        </div>
+                        </div>
                    </div>
                </div>
                <div class="flex justify-center flex-grow lg:w-5/6 xl:w-11/12">   
@@ -45,7 +57,7 @@
                {% if user.is_authenticated %}
                <div class="hidden lg:flex lg:items-center lg:justify-center xl:w-1/4 px-6">
                 <div class="relative mr-4">
-                    <a href="#" class="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
+                    <a href="{{request.user.get_absolute_url}}" class="flex overflow-hidden focus:outline-none focus:border-purple-600 flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
                         <img class="rounded-full h-8 w-8 object-cover" src="{{ request.user.image_profile.url }}" alt="">
                     </a>
                 </div>
@@ -71,3 +83,4 @@
    </div>
 </header>
 </div>
+
