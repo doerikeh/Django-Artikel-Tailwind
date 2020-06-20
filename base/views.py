@@ -42,9 +42,10 @@ class SingupView(FormView):
         return response
 
 class UserDetail(DetailView):
-    model = User
+    queryset = User.objects.all().prefetch_related("artikel_set")
     context_object_name = "user_detail"
     template_name = "detail_user.html"
+
 
 class SearchView(ListView):
     template_name = "search.html"
@@ -77,9 +78,17 @@ class SearchView(ListView):
 
 class ArtikelView(ListView):
     model = Artikel
-    queryset = Artikel.objects.all()
+    queryset = Artikel.objects.filter()
     context_object_name = "artikel_list"
     template_name = "home.html"
+
+class ArtikelViewList(ListView):
+    model = Artikel
+    context_object_name = "artikel_list_user"
+    template_name = "artikel_list.html"
+
+    def get_queryset(self):
+        return Artikel.objects.filter(user=self.request.user)
 
 
 class ArtikelDetail(DetailView):

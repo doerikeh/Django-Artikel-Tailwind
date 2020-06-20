@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AdminUser
-
+from django.db import models
 from .models import User, Tags, Artikel
 from django.utils.html import format_html
+from tinymce.widgets import TinyMCE
 
 import datetime
 
@@ -87,6 +88,11 @@ class TagsAdmin(admin.ModelAdmin):
     
 @admin.register(Artikel)
 class ArtikelAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ("Artikel", {"fields": ["user", "judul", "slug", "media"]}),
+        ("Content", {"fields": ["isi"]})
+    ]
+
     list_display = ("user", "judul", "slug", "date_created", "date_updated", "media")
     list_filter = (DateYearFilterArtikel,)
     autocomplete_fields = ('tags',)
@@ -94,3 +100,7 @@ class ArtikelAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug":("judul",)}
     list_max_show_all = 900
     list_per_page = 30
+
+    formfield_overrides = {
+        models.TextField: {'widget': TinyMCE()},
+    }

@@ -47,7 +47,8 @@
                       </div>
                     </a>
                       <div class="py-2">
-                        <p class="leading-snug break-all">{{artikel.isi}}</p>
+                        <h2 class="font-bold text-2xl text-gray-800 tracking-normal"><a href="{{artikel.get_absolute_url}}">{{artikel.judul|truncatewords:20}}</a></h2>
+                        <p class="leading-snug break-all">{{artikel.isi|truncatewords:50 }}</p>
                       </div>
                       <div class="px-6 py-4">
                         
