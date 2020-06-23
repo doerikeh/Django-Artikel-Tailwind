@@ -1,19 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 import logging
 from django.contrib.auth import login, authenticate
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib import messages
 from django.views.generic.edit import FormView
-from .forms import UserCreationForm
+from .forms import UserCreationForm, UserEditForm, ArtikelForm
 from .models import Artikel, User
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from itertools import chain
 from django.core.mail import send_mail
-
-
-
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 logger = logging.getLogger(__name__)
 
@@ -94,3 +93,33 @@ class ArtikelViewList(ListView):
 class ArtikelDetail(DetailView):
     model = Artikel
     template_name = "include/detail_artikel.html"
+
+def edit(request):
+    if request.method == "POST":
+        user_form = UserEditForm(instance=request.user, data=request.POST, files=request.FILES)
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+    context = {
+        "user_form": user_form
+    }
+    return render(request, "user_form.html", context)
+        
+
+def artikelform(request, slug=None):
+    if request.method == "POST":
+        form = ArtikelForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            # message success 
+            messages.success(request, "Successfully Created")
+            return HttpResponseRedirect(instance.get_absolute_url())
+    else:
+        form = ArtikelForm()
+    context = {
+        "artikel_form": form,
+    }
+    return render(request, "artikel_form.html", context)

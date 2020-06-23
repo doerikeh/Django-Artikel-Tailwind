@@ -3,6 +3,38 @@
 {% block title %} Artikel | Create {% endblock title %}
 
 {% block content %}
-
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex -mx-6">
+              <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
+                <div class="px-4 py-4 bg-white shadow-md rounded-lg">
+                <p class="text-center text-2xl font-medium my-6 text-gray-400">Create Artikel</p>
+                {{ form.media }}
+                <form action="" enctype="multipart/form-data" method="POST">
+                  <div class="text-center">
+                    <div class="mb-4">
+                      <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Media</p>{{artikel_form.media}}
+                    </div>
+                    <div class="mb-4">
+                      <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Judul</p>{{artikel_form.judul}}
+                    </div>
+                    <div class="mb-4">
+                      <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Tags</p>{{artikel_form.tags}}
+                    </div>
+                    <div class="mb-4">
+                      <p class="block text-gray-700 text-sm font-bold mb-2">Isi</p>{{artikel_form.isi}}
+                    </div>
+                    {% csrf_token %}
+                    <div class="my-4">
+                    <input class="block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded" type="submit" value="Save Change">
+                  </div>
+                  </div>
+                </form>
+              </div>
+              </div>
+        
+      </div>
+    </div>
+</div>
 
 {% endblock content %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} Artikel | Edit User {% endblock title %}
+
+{% block content %}
+<div>
+  <div class="w-full max-w-screen-xl mx-auto px-6">
+    <div class="lg:flex -mx-6">
+        <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
+          <div class="px-4 py-4 bg-white shadow-md rounded-lg">
+            <div class="flex">
+                <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
+                  <p>Edit your profile</p>
+                  <form action="" enctype="multipart/form-data" method="post">
+                      {{user_form.as_p}}{% csrf_token %}
+                      <div class="my-4">
+                      <input class="block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded" type="submit" value="Save Change">
+                    </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

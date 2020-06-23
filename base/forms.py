@@ -6,7 +6,9 @@ from django import forms
 from django.contrib.auth import authenticate
 import logging
 from django.contrib.auth.forms import UsernameField
-from .models import User
+from .models import User, Artikel
+from tinymce.widgets import TinyMCE
+
 logger = logging.getLogger(__name__)
 
 
@@ -57,3 +59,18 @@ class AuthenticatedForm(forms.Form):
 
     def get_user(self):
         return self.user
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("image_profile", "image_sampul","username_user", "email", "no_tlp", "bio")
+
+
+class ArtikelForm(forms.ModelForm):
+    class Meta:
+        model = Artikel
+        fields = ("media" ,"judul", "tags", "isi")
+        widgets = {
+            "judul": forms.TextInput(attrs={"class": "form-control"}),
+            "isi":TinyMCE(attrs={'cols': 80, 'rows':50,'class': 'form-control'})
+        }

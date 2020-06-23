@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.db.models import Q
 from django.urls import reverse
-
+from django.template.defaultfilters import slugify
 class UserQuerySet(models.QuerySet):
     def search(self, query=None):
         qs = self
@@ -69,6 +69,10 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("base:user-detail", kwargs={"slug": self.slug})
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.username_user)
+        super(User, self).save(*args, **kwargs)
+
 class Tags(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
@@ -108,3 +112,7 @@ class Artikel(models.Model):
 
     def get_absolute_url(self):
         return reverse("base:detail-artikel", kwargs={"slug": self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.judul)
+        super(Artikel, self).save(*args, **kwargs)
