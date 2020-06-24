@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 import logging
 from django.contrib.auth import login, authenticate
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, RedirectView
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from .forms import UserCreationForm, UserEditForm, ArtikelForm
@@ -13,6 +13,10 @@ from itertools import chain
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.urls import reverse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +78,49 @@ class SearchView(ListView):
             self.count = len(qs)
             return qs
         return Artikel.objects.none() and User.objects.none()
+
+class ArtikelLike(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get("slug")
+        obj = get_object_or_404(Artikel, slug=slug)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user)
+        return url_
+
+class ArtikelLikeApi(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, slug=None, format=None):
+        # slug = self.kwargs.get("slug")
+        obj = get_object_or_404(Artikel, slug=slug)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        updated = False
+        liked = False
+        if user.is_authenticated():
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)
+
+# def like_artikel(request):
+#     artikel = get_object_or_404(Artikel, id=request.POST.get("artikel_id"))
+#     artikel.likes.add(request.user)
+#     return HttpResponseRedirect(artikel.get_absolute_url())
 
 class ArtikelView(ListView):
     model = Artikel

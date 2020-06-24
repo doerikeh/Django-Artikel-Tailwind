@@ -90,10 +90,10 @@ class TagsAdmin(admin.ModelAdmin):
 class ArtikelAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Artikel", {"fields": ["user", "judul", "slug", "media"]}),
-        ("Content", {"fields": ["isi"]})
+        ("Content", {"fields": ["isi", "likes"]})
     ]
 
-    list_display = ("user", "judul", "slug", "date_created", "date_updated", "media")
+    list_display = ("user", "judul", "slug", "date_created", "date_updated", "media", "like_count")
     list_filter = (DateYearFilterArtikel,)
     autocomplete_fields = ('tags',)
     search_fields = ("user", "judul", "date_created")
@@ -104,3 +104,6 @@ class ArtikelAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': TinyMCE()},
     }
+
+    def like_count(self, obj):
+        return obj.likes.all().count()

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load widget_tweaks %}
 {% block title %} Artikel | Edit User {% endblock title %}
 
 {% block content %}
@@ -8,19 +8,35 @@
     <div class="lg:flex -mx-6">
         <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
           <div class="px-4 py-4 bg-white shadow-md rounded-lg">
-            <div class="flex">
-                <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
-                  <p>Edit your profile</p>
+                  <p class="text-center text-2xl font-medium my-6 text-gray-400">Edit your profile</p>
                   <form action="" enctype="multipart/form-data" method="post">
-                      {{user_form.as_p}}{% csrf_token %}
+                      <div class="text-center">
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Image Sampul</p>{{user_form.image_profile}}
+                        </div>
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Image Profile</p>{{user_form.image_sampul}}
+                        </div>
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Name</p>{{user_form.username_user|add_class:"form-control"}}
+                        </div>
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Email</p>{{user_form.email}}
+                        </div>
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Phone Number</p>{{user_form.no_tlp}}
+                        </div>
+                        <div class="mb-4">
+                          <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Biografi</p>{{user_form.bio|add_class:"shadow appearance-none border rounded w-1/2 h-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none"}}
+                        </div>
+                      {% csrf_token %}
                       <div class="my-4">
                       <input class="block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded" type="submit" value="Save Change">
                     </div>
+                  </div>
                     </form>
                 </div>
             </div>
-          </div>
-        </div>
     </div>
   </div>
 </div>

@@ -22,7 +22,7 @@
                         <div class="px-4 py-2 mt-2">
                             <h2 class="font-bold text-2xl text-gray-800 tracking-normal"><a href="{{object.get_absolute_url}}">{{object.judul|truncatewords:20}}</a></h2>
                                 <p class="text-sm text-gray-700 px-2 mr-1">
-                                    {{object.isi|truncatewords:50 }}
+                                    {{object.isi|truncatewords:50|safe }}
                                 </p>
                                 <div class="flex items-center justify-between mt-2 mx-6">
                                     <a href="{{object.get_absolute_url}}" class="text-blue-500 text-xs -ml-3 ">Show More</a>

@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator
 from django.db.models import Q
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from django.db.models.signals import pre_save
 class UserQuerySet(models.QuerySet):
     def search(self, query=None):
         qs = self
@@ -104,11 +105,18 @@ class Artikel(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     isi = models.TextField()
+    likes = models.ManyToManyField(User, related_name="likes")
     objects = ArtikelManager()
     media = models.FileField(upload_to="File/")
 
+    def get_like_url(self):
+        return reverse("base:like-artikel", kwargs={"slug": self.slug})
+
     def __str__(self):
         return self.judul
+    
+    def get_api_like_url(self):
+        return reverse("base:like-artikel-api", kwargs={"slug": self.slug})
 
     def get_absolute_url(self):
         return reverse("base:detail-artikel", kwargs={"slug": self.slug})
