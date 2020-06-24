@@ -137,7 +137,7 @@ class ArtikelViewList(ListView):
         return Artikel.objects.filter(user=self.request.user)
 
 
-class ArtikelDetail(DetailView):
+class ArtikelDetail(DetailView  ):
     model = Artikel
     template_name = "include/detail_artikel.html"
     form = CommentForm()
