@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %} Artikel {% endblock title %}
 
 {% block content %}
@@ -10,10 +10,11 @@
           <div class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5">
             <div id="content">
                 <div class="flex">
-                  <div class="pt-24 pb-16 lg:pt-28 w-full">
+                  <div class="pt-24 pb-16 lg:pt-28 w-full">                    
                     <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
+                      <div class="lg:border-0 shadow-md bg-white rounded-lg px-4 py-8">
                         <h1 class="flex items-center text-3xl font-bold capitalize text-center">{{ object.judul}}</h1>
-                        <div class="flex mt-2">
+                        <div class="flex mt-4">
                           <a class="like-btn" data-href='{{ object.get_api_like_url }}' data-likes='{{ object.likes.count }}' href="{{object.get_like_url}}">
                             <button class="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg" type="submit">
                               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
@@ -31,17 +32,45 @@
                           </button>
                         </div>
                         
-                        <hr class="my-8 border-b-2 border-gray-200"/>
-                        
+                        <hr class="my-4 border-b-2 border-gray-200"/>
+                        <div class="flex justify-between items-center">
+                        <p>Create By : {{object.user.username_user}}</p>
+                        <p>Date : {{object.date_created}}</p>
+                      </div>
+                      </div>
                     </div>
 
-                      
+                    
                     <div class="flex">
                         <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+                          <div class="lg:border-0 shadow-md bg-white rounded-lg px-4 py-8">
                             <img src="{{object.media.url}}" class="w-full h-auto" alt="">
                             <p class="leading-relaxed break-all pt-4">{{object.isi|safe}}</p>
+                          </div>
                         </div>
                     </div>
+                    <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+                      <div class="lg:border-0 shadow-md bg-white rounded-lg px-4 py-8">
+                      {% for comment in object.get_comments %}
+                      <div class="mt-4">
+                        <div class="flex justify-between">
+                          <div class="flex items-center">
+                            {% if comment.user %}
+                            <img class="rounded-full h-8 w-8 object-cover" src="{{ comment.user.image_profile.url }}" alt="">
+                            {% else %}
+                              <img src="{% static 'img/svg/person.svg' %}" alt="..." class="rounded-full h-8 w-8 object-cover">  
+                            {% endif %}
+                            <strong class="ml-4">{{ comment.user.username_user }}</strong>
+                          </div>
+                          <div class="title"><span class="date">{{ comment.date_created }} ago</span></div>
+                        </div>
+                        <div>
+                          <p>{{ comment.content }}</p>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
                 </div>
             </div>
           </div>

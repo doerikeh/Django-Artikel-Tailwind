@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.views.generic import ListView, DetailView, CreateView, RedirectView
 from django.contrib import messages
 from django.views.generic.edit import FormView
-from .forms import UserCreationForm, UserEditForm, ArtikelForm
+from .forms import UserCreationForm, UserEditForm, ArtikelForm, CommentForm
 from .models import Artikel, User
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -140,6 +140,19 @@ class ArtikelViewList(ListView):
 class ArtikelDetail(DetailView):
     model = Artikel
     template_name = "include/detail_artikel.html"
+    form = CommentForm()
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            artikel = self.get_object()
+            form.instance.user = request.user
+            form.instance.artikel = artikel
+            form.save()
+            return redirect(reverse("base:artikel-detail" , kwargs={"slug":artikel.slug}))
+
+
+
 
 def edit(request):
     if request.method == "POST":

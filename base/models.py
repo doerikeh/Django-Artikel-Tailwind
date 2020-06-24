@@ -97,6 +97,15 @@ class ArtikelManager(models.Manager):
     def search(self, query=None):
         return self.get_queryset().search(query=query)
 
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    artikel = models.ForeignKey("Artikel", related_name='comments', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username_user
+
 class Artikel(models.Model):
     judul = models.CharField(max_length=300, blank=False, null=False)
     tags = models.ManyToManyField(Tags)
@@ -124,3 +133,12 @@ class Artikel(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.judul)
         super(Artikel, self).save(*args, **kwargs)
+
+    @property
+    def get_comments(self):
+        return self.comments.all().order_by('-date_created')
+
+    @property
+    def comment_count(self):
+        return Comment.objects.filter(artikel=self).count()
+

@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth import authenticate
 import logging
 from django.contrib.auth.forms import UsernameField
-from .models import User, Artikel
+from .models import User, Artikel, Comment
 from tinymce.widgets import TinyMCE
 
 logger = logging.getLogger(__name__)
@@ -79,3 +79,14 @@ class ArtikelForm(forms.ModelForm):
             "judul": forms.TextInput(attrs={"class": "form-control"}),
             "isi":TinyMCE(attrs={'cols': 80, 'rows':50,'class': 'form-control'})
         }
+
+class CommentForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Type your comment',
+        'id': 'usercomment',
+        'rows': '4'
+    }))
+    class Meta:
+        model = Comment
+        fields = ('content', )

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AdminUser
 from django.db import models
-from .models import User, Tags, Artikel
+from .models import User, Tags, Artikel, Comment
 from django.utils.html import format_html
 from tinymce.widgets import TinyMCE
 
@@ -107,3 +107,9 @@ class ArtikelAdmin(admin.ModelAdmin):
 
     def like_count(self, obj):
         return obj.likes.all().count()
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("user", "date_created", "artikel")
+    search_fields = ("user", "artikel")
+    list_filter = ("date_created",)
