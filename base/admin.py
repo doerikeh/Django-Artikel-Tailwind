@@ -1,11 +1,22 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AdminUser
 from django.db import models
-from .models import User, Tags, Artikel, Comment
+from .models import User, Tags, Artikel, Comment, AuditEntry, MessageModel
 from django.utils.html import format_html
 from tinymce.widgets import TinyMCE
+from django.contrib.admin import ModelAdmin, site
 
 import datetime
+
+@admin.register(MessageModel)
+class MessageModelAdmin(ModelAdmin):
+    readonly_fields = ('timestamp',)
+    search_fields = ('id', 'body', 'user__username', 'recipient__username')
+    list_display = ('id', 'user', 'recipient', 'timestamp', 'characters')
+    list_display_links = ('id',)
+    list_filter = ('user', 'recipient')
+    date_hierarchy = 'timestamp'
+
 
 
 class DateYearFilter(admin.SimpleListFilter):
@@ -110,6 +121,11 @@ class ArtikelAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "date_created", "artikel")
-    search_fields = ("user", "artikel")
+    list_display = ("user", "date_created", "content")
+    search_fields = ("user", "content")
     list_filter = ("date_created",)
+
+@admin.register(AuditEntry)
+class AuditEntryAdmin(admin.ModelAdmin):
+    list_display = ['action', 'username', 'ip',]
+    list_filter = ['action',]
