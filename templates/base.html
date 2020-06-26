@@ -19,7 +19,11 @@
     {% block content %}
     {% endblock content %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>\
+
+    <script>
+      
+    </script>
 
     <script>
          $(document).ready(function(){
@@ -30,6 +34,8 @@
       $(".like-btn").click(function(e){
         e.preventDefault()
         var this_ = $(this)
+        var like = <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5"><path fill="#fc1e43" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+        var unlike = <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
         // const like = document.createElementNS("http://www.w3.org/2000/svg")
         var likeUrl = this_.attr("data-href")
         var likeCount = parseInt(this_.attr("data-likes")) | 0
@@ -44,9 +50,9 @@
               console.log(data)
               var newLikes;
               if (data.liked){
-                  updateText(this_, addLike, "Unlike")
+                  updateText(this_, addLike, unlike)
               } else {
-                  updateText(this_, removeLike, "Like")
+                  updateText(this_, removeLike, like)
                   // remove one like
               }
 

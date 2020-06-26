@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Artikel | Chat {% endblock title %}
+
+{% block content %}
+<div>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+      <div class="lg:flex -mx-6">
+        <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 lg:mr-24 w-full">
+            <div class="bg-white shadow-md rounded-lg">
+                <div class="border py-4 px-8 z-20">
+                    <h1 class="block text-center tracking-wide text-gray-500 text-xl font-bold"><p>Messages</p></h1>
+                </div>
+                <div class="hidden fixed inset-0 h-screen z-50 mb-16 lg:-mb-0 lg:static lg:w-4/12 lg:block lg:border">
+                    <div class="border px-4 py-6 flex w-full">
+                        <img class="rounded-full h-12 w-12 object-cover" src="{{ request.user.image_profile.url }}" alt="">
+                        <div class="ml-4">
+                            <p class="font-bold text-md capitalize text-blue-600">{{request.user.username_user}}</p>
+                            <p>asdasd</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+     </div>
+    </div>
+</div>
+<script>
+    let sessionKey = '{{ request.session.session_key }}';
+    let currentUser = '{{ request.user.username_user }}';
+</script>
+
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock content %}

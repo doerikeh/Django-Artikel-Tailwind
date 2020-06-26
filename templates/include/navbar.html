@@ -9,12 +9,12 @@
                            <svg class="h-10 w-auto hidden md:block" height="72" viewBox="0 0 128 128" width="72" xmlns="http://www.w3.org/2000/svg"><g><g><path d="m64 78.38v28.75l-24.896 14.37-24.897-14.37v-28.75l24.897-14.38z" fill="#fd637b"/><path d="m39.1 92.75v28.75l-24.89-14.37v-28.75z" fill="#62e0da"/><path d="m64 78.38v28.75l-24.9 14.37v-28.75z" fill="#fdd82e"/></g><g><path d="m64 20.88v28.75l-24.896 14.37-24.897-14.37v-28.75l24.897-14.38z" fill="#62e0da"/><path d="m39.1 35.25v28.75l-24.89-14.37v-28.75z" fill="#fdd82e"/><path d="m64 20.88v28.75l-24.9 14.37v-28.75z" fill="#fd637b"/></g><g><path d="m113.793 49.63v28.75l-24.897 14.37-24.896-14.37v-28.75l24.896-14.38z" fill="#fdd82e"/><path d="m113.79 49.63v28.75l-24.89 14.37v-28.75z" fill="#fd637b"/><path d="m88.9 64v28.75l-24.9-14.37v-28.75z" fill="#62e0da"/></g></g></svg>
                        </a>
                        <div>
-                           <button id="userButton" class="block lg:mr-4 ml-24">
+                            <button id="userButton" class="block lg:mr-4 ml-24">
                                 <svg height="43" viewBox="0 -52 512 512" width="43" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h113.292969v113.292969h-113.292969zm0 0" fill="#62e0da"/><path d="m149.296875 0h362.703125v113.292969h-362.703125zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m0 147.007812h113.292969v113.292969h-113.292969zm0 0"/><path fill="#fdd82e" d="m149.296875 147.007812h362.703125v113.292969h-362.703125zm0 0"/><path d="m0 294.011719h113.292969v113.296875h-113.292969zm0 0" fill="#fd637b"/><path fill="#62e0da" d="m149.296875 294.011719h362.703125v113.296875h-362.703125zm0 0"/></svg>
                         </button>
                         <div id="userMenu" class="bg-white rounded shadow-md absolute mt-4 overflow-auto z-30 invisible px-4 py-4" style="width: 82%; height: 10rem;">
                             <ul class="list-reset flex leading-snug break-all">
-                                {% for tag in request.tags.all %}
+                                {% for tag in request.tagss_set.all %}
                                 <p class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">{{tag.title}}</p>
                                 {% endfor %}
                             </ul>
@@ -53,8 +53,56 @@
                    
                </div>
                {% if user.is_authenticated %}
-               <div class="hidden lg:flex lg:items-center lg:justify-center xl:w-1/4 px-6">
-                <div class="relative mr-4">
+               <div class="hidden lg:flex lg:items-center xl:w-1/4 px-4">
+                <div class="relative mr-12">
+                <a href="{% url 'base:chat' %}">
+                    <svg class="fill-current w-8 h-8" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        width="30.57px" height="30.571px" viewBox="0 0 30.57 30.571" style="enable-background:new 0 0 30.57 30.571;"
+                        xml:space="preserve">
+                    <g>
+                        <g>
+                    <path fill="#fd637b" d="M28.412,9.697H27.57v9.255c0,1.441-0.838,2.745-2.521,2.745H8.57v0.44c0,1.274,1.449,2.56,2.937,2.56h12.601l4.819,2.834
+                        l-0.7-2.834h0.186c1.486,0,2.158-1.284,2.158-2.56V11.894C30.57,10.62,29.898,9.697,28.412,9.697z"/>
+                    <path fill="#62e0da" d="M8.76,20.04h14.002c1.684,0,3.238-1.021,3.238-2.462V8.192V5.978c0-1.442-1.555-2.938-3.238-2.938H3.622
+                        C1.938,3.04,0,4.536,0,5.978v11.6c0,1.328,1.642,2.287,3.217,2.435l-1.025,3.891L8.76,20.04z M2,5.978
+                        C2.081,5.727,2.925,5.04,3.622,5.04h19.14C23.411,5.04,24,5.715,24,5.978v11.6c-0.048,0.114-0.508,0.462-1.238,0.462H3.622
+                        c-0.747,0-1.43-0.35-1.622-0.57V5.978z"/>
+                    </g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    </svg>
+                </a>
+                </div>
+                <div class="justify-start items-center text-gray-500">
                     <a href="{{request.user.get_absolute_url}}" class="flex overflow-hidden focus:outline-none focus:border-purple-600 flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
                         <img class="rounded-full h-8 w-8 object-cover" src="{{ request.user.image_profile.url }}" alt="">
                     </a>

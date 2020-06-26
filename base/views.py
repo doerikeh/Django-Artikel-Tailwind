@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, RedirectView
 from django.contrib import messages
 from django.views.generic.edit import FormView
 from .forms import UserCreationForm, UserEditForm, ArtikelForm, CommentForm
-from .models import Artikel, User
+from .models import Artikel, User, Tags, MessageModel
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -17,6 +17,16 @@ from django.urls import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import SessionAuthentication
+
+from artikel import settings
+from .serializer import MessageModelSerializer, UserModelSerializer
+
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +113,7 @@ class ArtikelLikeApi(APIView):
         user = self.request.user
         updated = False
         liked = False
-        if user.is_authenticated():
+        if user.is_authenticated:
             if user in obj.likes.all():
                 liked = False
                 obj.likes.remove(user)
@@ -128,6 +138,12 @@ class ArtikelView(ListView):
     context_object_name = "artikel_list"
     template_name = "home.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ArtikelView, self).get_context_data(**kwargs)
+        context['tagss'] = Tags.objects.all()
+        context['artikel'] = self.queryset
+        return context
+
 class ArtikelViewList(ListView):
     model = Artikel
     context_object_name = "artikel_list_user"
@@ -142,6 +158,11 @@ class ArtikelDetail(DetailView  ):
     template_name = "include/detail_artikel.html"
     form = CommentForm()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
+
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -149,7 +170,7 @@ class ArtikelDetail(DetailView  ):
             form.instance.user = request.user
             form.instance.artikel = artikel
             form.save()
-            return redirect(reverse("base:artikel-detail" , kwargs={"slug":artikel.slug}))
+            return redirect(reverse("base:detail-artikel", kwargs={"slug": artikel.slug}))
 
 
 
@@ -183,3 +204,56 @@ def artikelform(request, slug=None):
         "artikel_form": form,
     }
     return render(request, "artikel_form.html", context)
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return
+
+
+class MessagePagination(PageNumberPagination):
+    """
+    Limit message prefetch to one page.
+    """
+    page_size = settings.MESSAGES_TO_LOAD
+
+
+class MessageModelViewSet(ModelViewSet):
+    queryset = MessageModel.objects.all()
+    serializer_class = MessageModelSerializer
+    allowed_methods = ('GET', 'POST', 'HEAD', 'OPTIONS')
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    pagination_class = MessagePagination
+
+    def list(self, request, *args, **kwargs):
+        self.queryset = self.queryset.filter(Q(recipient=request.user) |
+                                             Q(user=request.user))
+        target = self.request.query_params.get('target', None)
+        if target is not None:
+            self.queryset = self.queryset.filter(
+                Q(recipient=request.user, user__username=target) |
+                Q(recipient__username=target, user=request.user))
+        return super(MessageModelViewSet, self).list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        msg = get_object_or_404(
+            self.queryset.filter(Q(recipient=request.user) |
+                                 Q(user=request.user),
+                                 Q(pk=kwargs['pk'])))
+        serializer = self.get_serializer(msg)
+        return Response(serializer.data)
+
+
+class UserModelViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserModelSerializer
+    allowed_methods = ('GET', 'HEAD', 'OPTIONS')
+    pagination_class = None  # Get all user
+
+    def list(self, request, *args, **kwargs):
+        # Get all users except yourself
+        self.queryset = self.queryset.exclude(id=request.user.id)
+        return super(UserModelViewSet, self).list(request, *args, **kwargs)
+
+def chat(request):
+    return render(request, "chat.html", {})

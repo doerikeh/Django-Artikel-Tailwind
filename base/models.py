@@ -52,6 +52,7 @@ class UserManager(BaseUserManager):
 
     def get_queryset(self):
         return UserQuerySet(self.model, using=self._db)
+        
     def search(self, query=None):
         return self.get_queryset().search(query=query)
 
