@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'tinymce',
     'channels',
     "widget_tweaks",
-    "rest_framework"
-
+    "rest_framework",
+    'clear_cache',
 ]
+
+MESSAGES_TO_LOAD = 15
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -84,14 +89,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'width': 1120,
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 20,
-    "imagetools_cors_hosts": "['picsum.photos']",
     'selector': 'textarea',
-    "autosave_ask_before_unload": True,
-    "autosave_prefix": "{path}{query}-{id}-",
-    "autosave_interval": "30s",
-    "autosave_restore_when_empty": False,
-    "autosave_retention": "2m",
-    "image_advtab": True,
     'theme': 'modern',
     'plugins': '''
             textcolor save link image media preview codesample contextmenu
@@ -110,14 +108,10 @@ TINYMCE_DEFAULT_CONFIG = {
             visualblocks visualchars |
             charmap hr pagebreak nonbreaking anchor |  code |
             ''',
-    'contextmenu': 'formats | link image imagetools table',
-    "image_caption": True,
-    "template_cdate_format": "[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]",
-    "template_mdate_format": "[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]",
+    'contextmenu': 'formats | link image',
     'menubar': True,
-    "automatic_uploads": True,
     'statusbar': True,
-    }
+}
 
 TEMPLATES = [
     {
@@ -135,7 +129,23 @@ TEMPLATES = [
     },
 ]
 
+# REDIS_HOST = "127.0.0.1"
+# REDIS_PORT = "6379"
+# REDIS_DB = 0
+
 WSGI_APPLICATION = 'artikel.wsgi.application'
+CACHE_TTL = 60 * 15
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "vespaikeh"
+    }
+}
 
 
 # Database
@@ -191,5 +201,5 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-TINYMCE_JS_URL = os.path.join(STATIC_URL, "js/tinymce/tinymce.min.js")
-TINYMCE_JS_ROOT = os.path.join(STATIC_URL, "js/tinymce")
+# TINYMCE_JS_URL = os.path.join(STATIC_URL, "js/tinymce/tinymce.min.js")
+# TINYMCE_JS_ROOT = os.path.join(STATIC_URL, "js/tinymce")
