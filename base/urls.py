@@ -1,6 +1,6 @@
 from .views import (SingupView, SearchView, ArtikelDetail, ArtikelView, UserDetail, 
                     ArtikelViewList, edit, artikelform,ArtikelLike, ArtikelLikeApi,
-                    MessageModelViewSet, UserModelViewSet, chat)
+                    MessageModelViewSet, UserModelViewSet, chat, list_post_tags)
 from django.urls import path, include
 from .forms import AuthenticatedForm
 from django.contrib.auth import views as auth_views
@@ -10,7 +10,7 @@ app_name = "base"
 
 router = DefaultRouter()
 router.register(r'message', MessageModelViewSet, basename='message-api')
-router.register(r'chat', UserModelViewSet, basename='user-api')
+router.register(r'user', UserModelViewSet, basename='user-api')
 
 urlpatterns = [
     path(r'api/v1/', include(router.urls)),
@@ -26,5 +26,6 @@ urlpatterns = [
     path("chat/", chat, name="chat"),
     path("", ArtikelView.as_view(), name="home"),
     path("<slug:slug>/like/", ArtikelLike.as_view(), name="like-artikel"),
-    path("api/<slug:slug>/like/", ArtikelLikeApi.as_view(), name="like-artikel-api")
+    path("api/<slug:slug>/like/", ArtikelLikeApi.as_view(), name="like-artikel-api"),
+    path("tags/<slug:slug>/", list_post_tags, name="tags-list")
 ]

@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as AdminUser
 from django.db import models
 from .models import User, Tags, Artikel, Comment, AuditEntry, MessageModel
 from django.utils.html import format_html
-from tinymce.widgets import TinyMCE
+from tinymce.models import TinyMCE
 from django.contrib.admin import ModelAdmin, site
 
 import datetime
@@ -12,7 +12,7 @@ import datetime
 class MessageModelAdmin(ModelAdmin):
     readonly_fields = ('timestamp',)
     search_fields = ('id', 'body', 'user__username', 'recipient__username')
-    list_display = ('id', 'user', 'recipient', 'timestamp', 'characters')
+    list_display = ('id', 'user', 'recipient', 'timestamp', 'body')
     list_display_links = ('id',)
     list_filter = ('user', 'recipient')
     date_hierarchy = 'timestamp'
@@ -100,7 +100,7 @@ class TagsAdmin(admin.ModelAdmin):
 @admin.register(Artikel)
 class ArtikelAdmin(admin.ModelAdmin):
     fieldsets = [
-        ("Artikel", {"fields": ["user", "judul", "slug", "media"]}),
+        ("Artikel", {"fields": ["user", "judul", "slug", "media", "tags"]}),
         ("Content", {"fields": ["isi", "likes"]})
     ]
 

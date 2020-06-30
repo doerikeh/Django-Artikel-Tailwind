@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 import logging
+import redis
+
 from django.contrib.auth import login, authenticate
 from django.views.generic import ListView, DetailView, CreateView, RedirectView
 from django.contrib import messages
@@ -21,12 +23,14 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication
-
-from artikel import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
 from .serializer import MessageModelSerializer, UserModelSerializer
 
 
-
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +63,9 @@ class UserDetail(DetailView):
     context_object_name = "user_detail"
     template_name = "detail_user.html"
 
+    # def get_context_data(self, *args, **kwargs):
+    #     context['view'] = r.incr(f'user:{user.id}:views')
+    #     return context
 
 class SearchView(ListView):
     template_name = "search.html"
@@ -131,11 +138,9 @@ class ArtikelLikeApi(APIView):
 #     artikel = get_object_or_404(Artikel, id=request.POST.get("artikel_id"))
 #     artikel.likes.add(request.user)
 #     return HttpResponseRedirect(artikel.get_absolute_url())
-
 class ArtikelView(ListView):
     model = Artikel
-    queryset = Artikel.objects.filter()
-    context_object_name = "artikel_list"
+    queryset = Artikel.objects.all()
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
@@ -153,7 +158,9 @@ class ArtikelViewList(ListView):
         return Artikel.objects.filter(user=self.request.user)
 
 
-class ArtikelDetail(DetailView  ):
+
+
+class ArtikelDetail(DetailView):
     model = Artikel
     template_name = "include/detail_artikel.html"
     form = CommentForm()
@@ -173,6 +180,19 @@ class ArtikelDetail(DetailView  ):
             return redirect(reverse("base:detail-artikel", kwargs={"slug": artikel.slug}))
 
 
+def list_post_tags(request, slug=None):
+    tags = Tags.objects.all()
+    artikel = Artikel.objects.all()
+    if slug:
+        tag = get_object_or_404(Tags, slug=slug)
+        artikel = artikel.filter(tags=tag)
+    template = "tags_filter.html"
+    context = {
+        "tags":tags,
+        "artikel":artikel,
+        "tag": tag
+    }
+    return render(request, template, context)
 
 
 def edit(request):
@@ -195,9 +215,10 @@ def artikelform(request, slug=None):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
-            # message success 
+            form.save_m2m()
             messages.success(request, "Successfully Created")
             return HttpResponseRedirect(instance.get_absolute_url())
+            
     else:
         form = ArtikelForm()
     context = {
@@ -218,6 +239,7 @@ class MessagePagination(PageNumberPagination):
     page_size = settings.MESSAGES_TO_LOAD
 
 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class MessageModelViewSet(ModelViewSet):
     queryset = MessageModel.objects.all()
     serializer_class = MessageModelSerializer
@@ -231,8 +253,8 @@ class MessageModelViewSet(ModelViewSet):
         target = self.request.query_params.get('target', None)
         if target is not None:
             self.queryset = self.queryset.filter(
-                Q(recipient=request.user, user__username=target) |
-                Q(recipient__username=target, user=request.user))
+                Q(recipient=request.user, user__username_user=target) |
+                Q(recipient__username_user=target, user=request.user))
         return super(MessageModelViewSet, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
@@ -244,6 +266,7 @@ class MessageModelViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class UserModelViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserModelSerializer

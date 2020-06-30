@@ -90,6 +90,9 @@ class Tags(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("base:tags-list", kwargs={"slug": self.slug})
+
 class ArtikelQuerySet(models.QuerySet):
     def search(self, query=None):
         qs = self
@@ -115,7 +118,7 @@ class Comment(models.Model):
 
 class Artikel(models.Model):
     judul = models.CharField(max_length=300, blank=False, null=False)
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tags, )
     slug = models.SlugField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -193,12 +196,8 @@ class MessageModel(models.Model):
     
 
     def __str__(self):
-        return str(self.id)
+        return str(self.user.username_user)
 
-
-    def characters(self):
-
-        return len(self.body)
 
     def notify_ws_clients(self):
 
@@ -224,7 +223,6 @@ class MessageModel(models.Model):
 
     # Meta
     class Meta:
-        app_label = 'core'
         verbose_name = 'message'
         verbose_name_plural = 'messages'
         ordering = ('-timestamp',)

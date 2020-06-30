@@ -11,17 +11,30 @@
                 <div class="border py-4 px-8 z-20">
                     <h1 class="block text-center tracking-wide text-gray-500 text-xl font-bold"><p>Messages</p></h1>
                 </div>
-                <div class="hidden fixed inset-0 h-screen z-50 mb-16 lg:-mb-0 lg:static lg:w-4/12 lg:block lg:border">
-                    <div class="border px-4 py-6 flex w-full">
-                        <img class="rounded-full h-12 w-12 object-cover" src="{{ request.user.image_profile.url }}" alt="">
-                        <div class="ml-4">
-                            <p class="font-bold text-md capitalize text-blue-600">{{request.user.username_user}}</p>
-                            <p>asdasd</p>
+                <div class="flex">
+                    <div class="hidden fixed inset-0 h-screen z-50 lg:-mb-0 lg:static lg:w-4/12 lg:block lg:border">
+                        <div class="border px-4 py-6 flex w-full group bg-white">
+                            <div id="user-list">    
+
+                            </div>
                         </div>
-                        
+                    </div>
+                    <div class="lg:border px-4 py-6 lg:w-3/4">
+                        <div>
+                        <ul id="messages" class="messages">
+                            
+                        </ul>
+                     </div>
+                     
+                        <input id="chat-input" type="text"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                   placeholder="Type your message here ..."
+                                   maxlength="500">
+                        <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-full mt-2"
+                                id="btn-send">
+                            Send</button>
                     </div>
                 </div>
-                
             </div>
         </div>
      </div>
