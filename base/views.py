@@ -28,7 +28,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from .serializer import MessageModelSerializer, UserModelSerializer
-
+from .mixin import ObjectViewMixin
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -58,7 +58,7 @@ class SingupView(FormView):
         )
         return response
 
-class UserDetail(DetailView):
+class UserDetail(ObjectViewMixin, DetailView):
     queryset = User.objects.all().prefetch_related("artikel_set")
     context_object_name = "user_detail"
     template_name = "detail_user.html"
@@ -160,7 +160,7 @@ class ArtikelViewList(ListView):
 
 
 
-class ArtikelDetail(DetailView):
+class ArtikelDetail(ObjectViewMixin, DetailView):
     model = Artikel
     template_name = "include/detail_artikel.html"
     form = CommentForm()
@@ -225,6 +225,13 @@ def artikelform(request, slug=None):
         "artikel_form": form,
     }
     return render(request, "artikel_form.html", context)
+
+# def tags_navbar(request):
+#     tags_list = Tags.objects.all()
+#     context = {
+#         "tags": tags_list
+#     }
+#     return render(request,)
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
 

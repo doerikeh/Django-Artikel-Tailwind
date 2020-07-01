@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.db.models.signals import pre_save
@@ -10,8 +12,10 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out, user_lo
 from django.dispatch import receiver
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from .signals import object_viewed_signal
 from mirage import fields
 import base64
+
 class UserQuerySet(models.QuerySet):
     def search(self, query=None):
         qs = self
@@ -92,6 +96,10 @@ class Tags(models.Model):
 
     def get_absolute_url(self):
         return reverse("base:tags-list", kwargs={"slug": self.slug})
+
+    @property
+    def all_tags(self):
+        return Tags.objects.all()
 
 class ArtikelQuerySet(models.QuerySet):
     def search(self, query=None):
@@ -182,7 +190,27 @@ def user_login_failed_callback(sender, credentials, **kwargs):
     AuditEntry.objects.create(action='user_login_failed', username=credentials.get('username_user', None))
 
 
+class History(models.Model):
+    user        = models.ForeignKey(User, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+    viewed_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "%s viewed: %s" %(self.content_object, self.viewed_on)
+
+    class Meta:
+        verbose_name_plural = "History_User"
+
+def object_viewed_receiver(sender, instance, request, *args, **kwargs):
+    new_history = History.objects.create(
+        user    = request.user,
+        content_type    = ContentType.objects.get_for_model(sender),
+        object_id      = instance.id,
+    )
+
+object_viewed_signal.connect(object_viewed_receiver)
 
 
 class MessageModel(models.Model):

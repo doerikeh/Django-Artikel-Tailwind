@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AdminUser
 from django.db import models
-from .models import User, Tags, Artikel, Comment, AuditEntry, MessageModel
+from .models import User, Tags, Artikel, Comment, AuditEntry, MessageModel, History
 from django.utils.html import format_html
 from tinymce.models import TinyMCE
 from django.contrib.admin import ModelAdmin, site
@@ -129,3 +129,8 @@ class CommentAdmin(admin.ModelAdmin):
 class AuditEntryAdmin(admin.ModelAdmin):
     list_display = ['action', 'username', 'ip',]
     list_filter = ['action',]
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = ("user", "content_type", "viewed_on")
+    list_filter = ("viewed_on",)
