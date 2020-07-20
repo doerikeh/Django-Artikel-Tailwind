@@ -129,8 +129,8 @@ class CommentAdmin(admin.ModelAdmin):
 class AuditEntryAdmin(admin.ModelAdmin):
     list_display = ['action', 'username', 'ip',]
     list_filter = ['action',]
+    list_per_page = 30
 
 @admin.register(History)
 class HistoryAdmin(admin.ModelAdmin):
-    list_display = ("user", "content_type", "viewed_on")
     list_filter = ("viewed_on",)

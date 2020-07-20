@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MESSAGES_TO_LOAD = 15
-
+CLEAR_CACHE_ON_RESTART = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,8 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -65,13 +65,6 @@ LOGIN_URL = 'login/'
 LOGOUT_REDIRECT_URL = "/"
 ROOT_URLCONF = 'artikel.urls'
 AUTH_USER_MODEL = "base.User"
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgiref.inmemory.ChannelLayer",
-        "ROUTING": "core.routing.channel_routing",
-    },
-}
 
 ASGI_APPLICATION = 'artikel.routing.application'
 CHANNEL_LAYERS = {
@@ -175,6 +168,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'artikel.validators.NumberValidator'
+    },
+    {
+        'NAME': 'artikel.validators.UppercaseValidator'
+    },
+    {
+        'NAME': 'artikel.validators.LowercaseValidator'
+    },
+    {
+        'NAME': 'artikel.validators.SymbolValidator'
+    }
 ]
 
 

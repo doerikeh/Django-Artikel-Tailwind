@@ -27,5 +27,6 @@ urlpatterns = [
     path("", ArtikelView.as_view(), name="home"),
     path("<slug:slug>/like/", ArtikelLike.as_view(), name="like-artikel"),
     path("api/<slug:slug>/like/", ArtikelLikeApi.as_view(), name="like-artikel-api"),
-    path("tags/<slug:slug>/", list_post_tags, name="tags-list")
+    path("tags/<slug:slug>/", list_post_tags, name="tags-list"),
+    path("password/change/", auth_views.PasswordChangeView.as_view(template_name="change_password.html"), name="change_password")
 ]

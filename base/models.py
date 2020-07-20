@@ -160,6 +160,10 @@ class Artikel(models.Model):
     def comment_count(self):
         return Comment.objects.filter(artikel=self).count()
 
+    @property
+    def artikel_count(self):
+        return Artikel.objects.all().count()
+
 
 class AuditEntry(models.Model):
     action = models.CharField(max_length=64)
@@ -198,7 +202,7 @@ class History(models.Model):
     viewed_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "%s viewed: %s" %(self.content_object, self.viewed_on)
+        return "%s, %s viewed: %s" %(self.user.username_user, self.content_object, self.viewed_on)
 
     class Meta:
         verbose_name_plural = "History_User"

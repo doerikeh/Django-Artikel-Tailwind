@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 import logging
 import redis
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+# from django.contrib.auth.forms import PasswordChangeForm
 from django.views.generic import ListView, DetailView, CreateView, RedirectView
 from django.contrib import messages
 from django.views.generic.edit import FormView
@@ -13,7 +14,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from itertools import chain
 from django.core.mail import send_mail
-from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 from rest_framework.views import APIView
@@ -63,9 +63,10 @@ class UserDetail(ObjectViewMixin, DetailView):
     context_object_name = "user_detail"
     template_name = "detail_user.html"
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context['view'] = r.incr(f'user:{user.id}:views')
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(UserDetail, self).get_context_data(**kwargs)
+        context['artikel'] = Artikel.objects.count()
+        return context
 
 class SearchView(ListView):
     template_name = "search.html"
@@ -287,3 +288,19 @@ class UserModelViewSet(ModelViewSet):
 
 def chat(request):
     return render(request, "chat.html", {})
+
+# def change_password(request):
+#     if request.method == 'POST':
+#         form = PasswordChangeForm(request.user, request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             update_session_auth_hash(request, user)  # Important!
+#             messages.success(request, 'Your password was successfully updated!')
+#             return redirect('change_password')
+#         else:
+#             messages.error(request, 'Please correct the error below.')
+#     else:
+#         form = PasswordChangeForm(request.user)
+#     return render(request, 'change_password.html', {
+#         'form': form
+#     })

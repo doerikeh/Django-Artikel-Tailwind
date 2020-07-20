@@ -20,7 +20,7 @@
                       <div class="py-2 flex flex-row items-center justify-between">
                         <div class="flex flex-row items-center">
                           {% if artikel.user.image_profile %}
-                          <a href="#" class="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
+                          <a href="{{artikel.user.get_absolute_url}}" class="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg">
                             <img class="rounded-full h-8 w-8 object-cover" src="{{artikel.user.image_profile.url}}" alt="">
                             <p class="ml-2 text-base font-medium">{{artikel.user.username_user}}</p>
                           </a>
