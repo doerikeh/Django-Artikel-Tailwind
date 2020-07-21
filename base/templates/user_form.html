@@ -6,7 +6,8 @@
 <div>
   <div class="w-full max-w-screen-xl mx-auto px-6">
     <div class="lg:flex -mx-6">
-        <div class="pt-24 pb-16 lg:pt-28 lg:ml-16 w-full">
+      <div class="w-full lg:static lg:max-h-full">
+        <div class="pt-24 pb-16 lg:pt-28 w-full">
           <div class="border-b-2 pb-2 w-11/12 flex justify-center">
             <span class="{% if request.user_detail == 'base:user-detail' %}text-blue-700 font-bold{% endif %}">
               <a href="{% url 'base:artikel-form' %}" class="pr-24 "><h2>Profile</h2></a>
@@ -46,6 +47,7 @@
                     </form>
                 </div>
             </div>
+          </div>
     </div>
   </div>
 </div>

@@ -5,8 +5,28 @@ from .models import User, Tags, Artikel, Comment, AuditEntry, MessageModel, Hist
 from django.utils.html import format_html
 from tinymce.models import TinyMCE
 from django.contrib.admin import ModelAdmin, site
+import csv
+from django.http import HttpResponse
 
 import datetime
+
+class ExportCsvMixin:
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export Selected"
 
 @admin.register(MessageModel)
 class MessageModelAdmin(ModelAdmin):
@@ -124,13 +144,20 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ("user", "date_created", "content")
     search_fields = ("user", "content")
     list_filter = ("date_created",)
+    list_max_show_all = 900
+    list_per_page = 30
 
 @admin.register(AuditEntry)
 class AuditEntryAdmin(admin.ModelAdmin):
     list_display = ['action', 'username', 'ip',]
     list_filter = ['action',]
+    actions = ["export_as_csv"]
     list_per_page = 30
 
 @admin.register(History)
-class HistoryAdmin(admin.ModelAdmin):
+class HistoryAdmin(admin.ModelAdmin, ExportCsvMixin):
+    search_fields = ("user",)
     list_filter = ("viewed_on",)
+    list_per_page = 40
+    list_max_show_all = 1000
+    actions = ["export_as_csv"]
